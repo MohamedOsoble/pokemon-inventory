@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=title%></title>
+</head>
+<body>
+    <%-include('nav')%>
+    <ul>
+        <h1><%=title%></h1>
+        <img src='<%= pokemon.sprite %>'>
+        <p><strong>Pokedex No: </strong><%=pokemon.id%></p>
+        <p><strong>Type: </strong><%= pokemon.primary_type %> <%= pokemon.secondary_type %></p>
+        <p><strong>Ability: </strong> <%= pokemon.ability %></p>
+    </ul>
+    <ul>
+        <h1>Owned by:</h1>
+        <%if(owners.length > 0){ %>
+                    <% owners.forEach((owner) => { %>
+            <a href="trainers/<%=owner.id%>">
+                <p><strong>Trainer name: </strong><%=owner.name%></p>
+            </a>
+        <% }); %>
+        <%} else { %>
+            <p>Nobody owned this pokemon</p>
+        <%}%>
+    </ul>
+</body>
+</html>

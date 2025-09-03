@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Pokemon Trainers: </title>
+</head>
+<body>
+    <%-include('nav')%>
+    <h1> All Registered Trainers: </h1>
+    <ul>
+        <%if(trainers){ %>
+        <% trainers.forEach((trainer) => { %>
+            <%- include('trainerCard', {trainer: trainer}); %>
+        <% }); %>
+        <%} else { %>
+            <p>There are no registered trainers</p>
+        <%}%>
+    </ul>
+</body>
+</html>

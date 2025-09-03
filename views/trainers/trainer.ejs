@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer name goes here or something</title>
+</head>
+<body>
+    <%-include('nav') %>
+    <h1>Trainer: <%= trainer.name %></h1>
+    <h2>Pokemon Owned: </h2>
+    <ul>
+        <% ownedPokemon.forEach((pokemon) => { %>
+            <li>
+                <h3><%=pokemon.name%></h3>
+                <img src="<%=pokemon.sprite%>">
+                <p><strong>Pokedex No: </strong><%=pokemon.id%></p>
+                <p><strong>Type: </strong><%= pokemon.primary_type %> <%= pokemon.secondary_type %></p>
+                <p><strong>Ability: </strong> <%= pokemon.ability %></p>
+                <form action="/trainers/<%=trainer.id%>/<%=pokemon.id%>" method="POST"><button>Delete</button></form>
+            </li>
+        <% }); %>
+    </ul>
+</body>
+</html>

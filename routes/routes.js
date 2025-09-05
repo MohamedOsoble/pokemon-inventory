@@ -7,7 +7,14 @@ appRouter.get("/pokemon", appController.viewAllPokemon);
 appRouter.get("/pokemon/:id", appController.viewPokemonOwners);
 appRouter.get("/trainers", appController.viewAllTrainers);
 appRouter.get("/trainers/:id", appController.viewTrainer);
+appRouter.get("/newtrainer", appController.getNewTrainer);
 
-appRouter.post("/trainers/:trainerid/:pokemonid", appController.deletePokemon);
+appRouter.post(
+  "/pokemon/delete/:trainerid/:pokemonid",
+  appController.deletePokemon
+);
+appRouter.post("/trainers/delete/:trainerid", appController.deleteTrainer);
+appRouter.post("/newtrainer", appController.postNewTrainer);
+appRouter.post("/newpokemon", appController.addPokemon);
 
 module.exports = appRouter;

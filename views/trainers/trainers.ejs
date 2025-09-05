@@ -6,7 +6,7 @@
     <title>All Pokemon Trainers: </title>
 </head>
 <body>
-    <%-include('nav')%>
+    <%-include('../misc/nav')%>
     <h1> All Registered Trainers: </h1>
     <ul>
         <%if(trainers){ %>
@@ -17,5 +17,8 @@
             <p>There are no registered trainers</p>
         <%}%>
     </ul>
+    <form action="/newtrainer">
+        <input type="submit" method="GET" value="Add New Trainer">
+    </form>
 </body>
 </html>

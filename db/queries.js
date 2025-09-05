@@ -13,7 +13,8 @@ ORDER BY
 async function getPokemon(pokemonId) {
   const query = {
     text: `SELECT * FROM pokemon
-        WHERE id = ($1)`,
+        WHERE id = ($1)
+        ORDER BY pokemon.id`,
     values: [pokemonId],
   };
   const result = await pool.query(query);
@@ -41,9 +42,9 @@ async function getOwnedPokemon(trainerId) {
 
 async function getAllTrainers() {
   const { rows } =
-    await pool.query(`SELECT trainers.id, trainers.name, COUNT(pokemon_owner.trainer_id) AS pokemon_owned
+    await pool.query(`SELECT trainers.id, COUNT(pokemon_owner.trainer_id) AS pokemon_owned, trainers.name
              FROM trainers 
-             INNER JOIN pokemon_owner on trainers.id = pokemon_owner.trainer_id
+             LEFT JOIN pokemon_owner on trainers.id = pokemon_owner.trainer_id
              GROUP BY trainers.id`);
   return rows;
 }
@@ -59,23 +60,25 @@ async function getTrainer(trainerId) {
 
 async function getAllOwners(pokemonId) {
   const query = {
-    text: `SELECT * FROM pokemon
+    text: `SELECT trainers.id, trainers.name FROM pokemon
         INNER JOIN pokemon_owner ON pokemon.id = pokemon_owner.pokemon_id
-        INNER JOIN trainers ON trainer.id = pokemon_owner.trainer_id
+        INNER JOIN trainers ON trainers.id = pokemon_owner.trainer_id
         WHERE pokemon_owner.pokemon_id = ($1)`,
     values: [pokemonId],
   };
-  await pool.query(query);
+  const rows = await pool.query(query);
+  return rows;
 }
 
 async function addTrainer(trainerName) {
   const query = {
     text: `INSERT INTO trainers (name)
-        VALUES ($1)`,
+        VALUES ($1)
+        RETURNING id`,
     values: [trainerName],
   };
-
-  await pool.query(query);
+  const { rows } = await pool.query(query);
+  return rows[0];
 }
 
 async function addPokemon(trainerId, pokemonId) {
@@ -85,6 +88,7 @@ async function addPokemon(trainerId, pokemonId) {
         VALUES ($1, $2)`,
     values: [trainerId, pokemonId],
   };
+  console.log(query);
 
   await pool.query(query);
 }
@@ -102,8 +106,7 @@ async function editTrainerName(trainerId, newName) {
 async function deletePokemon(trainerId, pokemonId) {
   const query = {
     text: `DELETE FROM pokemon_owner
-        WHERE trainer_id = ($1)
-        AND pokemon_id = ($2)`,
+WHERE id IN (SELECT id FROM pokemon_owner WHERE trainer_id = ($1) AND pokemon_id = ($2) LIMIT 1);`,
     values: [trainerId, pokemonId],
   };
   await pool.query(query);

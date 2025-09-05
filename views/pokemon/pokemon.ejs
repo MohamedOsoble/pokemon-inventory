@@ -6,7 +6,7 @@
     <title><%=title%></title>
 </head>
 <body>
-    <%-include('nav')%>
+    <%-include('../misc/nav')%>
     <ul>
         <h1><%=title%></h1>
         <img src='<%= pokemon.sprite %>'>
@@ -18,7 +18,7 @@
         <h1>Owned by:</h1>
         <%if(owners.length > 0){ %>
                     <% owners.forEach((owner) => { %>
-            <a href="trainers/<%=owner.id%>">
+            <a href="../trainers/<%=owner.id%>">
                 <p><strong>Trainer name: </strong><%=owner.name%></p>
             </a>
         <% }); %>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Trainer</title>
+</head>
+<body>
+    <%-include('../partials/errors')%>
+    <form action="/newtrainer" method="POST">
+        <label for="name">Trainer name: </label>
+        <input type="text" id="name" name="name" required>
+        <label for="starter">Starter Pokemon: </label>
+        <select name="starter" id="starter">
+            <% allPokemon.forEach((pokemon) => { %>
+            <option value="<%=pokemon.id%>" id="<%=pokemon.id%>">
+            <%=pokemon.name%></option>
+        <% }); %>
+        </select>
+        <input type="submit" value="Add Trainer">
+    </form>
+</body>
+</html>

@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS pokemon_type;
 
     CREATE TABLE IF NOT EXISTS trainers (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) UNIQUE NOT NULL
 );
 
     CREATE TABLE IF NOT EXISTS pokemon (
@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS pokemon_type;
     secondary_type VARCHAR(50)
 );
     CREATE TABLE IF NOT EXISTS pokemon_owner (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     trainer_id INTEGER NOT NULL,
     pokemon_id INTEGER NOT NULL,
     CONSTRAINT trainer_id
@@ -182,9 +183,13 @@ async function main() {
   console.log("Tables created");
   await populatePokemonTable();
   console.log("pokemon table populated");
+  console.log("pausing for 12 seconds before populating owners table");
+  setTimeout(() => {
+    populateOwners();
+  }, 12000);
   await client.end();
   console.log("done");
 }
 
 main();
-populateOwners();
+//populateOwners();

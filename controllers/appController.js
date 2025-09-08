@@ -11,7 +11,8 @@ async function viewAllTrainers(req, res) {
 }
 
 async function viewTrainer(req, res) {
-  const trainerId = req.params.id;
+  console.log(res.locals);
+  const trainerId = req.params.id || res.locals.trainerid;
   const trainer = await db.getTrainer(trainerId);
   const trainerPokemon = await db.getOwnedPokemon(trainerId);
   const allPokemon = await db.getAllPokemon();
@@ -102,6 +103,45 @@ async function addPokemon(req, res) {
   res.redirect("/trainers/" + trainerId);
 }
 
+async function updateTrainerName(req, res, next) {
+  res.locals.trainerid = req.body.trainerid;
+  const trainerId = req.body.trainerid;
+  const newName = req.body.newName;
+  try {
+    await db.editTrainerName(trainerId, newName);
+    res.redirect("/trainers/" + trainerId);
+  } catch (error) {
+    console.error(error);
+    const pokemonList = await db.getAllPokemon();
+    const trainer = await db.getTrainer(trainerId);
+    const trainerPokemon = await db.getOwnedPokemon(trainerId);
+    console.log(trainerPokemon);
+    if (error.code === "23505") {
+      res.render("trainers/trainer", {
+        trainer: trainer,
+        ownedPokemon: trainerPokemon,
+        allPokemon: pokemonList,
+        errors: [
+          {
+            msg: "Username already exists in db",
+          },
+        ],
+      });
+    } else {
+      res.render("trainers/trainer", {
+        trainer: trainer,
+        ownedPokemon: trainerPokemon,
+        allPokemon: pokemonList,
+        errors: [
+          {
+            msg: "Username already exists in db",
+          },
+        ],
+      });
+    }
+  }
+}
+
 module.exports = {
   homeGet,
   viewAllTrainers,
@@ -113,4 +153,5 @@ module.exports = {
   deletePokemon,
   deleteTrainer,
   addPokemon,
+  updateTrainerName,
 };

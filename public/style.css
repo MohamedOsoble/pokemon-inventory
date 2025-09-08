@@ -1,0 +1,43 @@
+ul {
+    display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+    color: black;
+}
+
+a{
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.nav-item{
+    padding: 15px;
+    margin: 5px;
+    border: 2px solid black;
+}
+
+.pokemon-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pokemon-card {
+    flex: 1 1 225px; /* explanation below */
+    margin: 5px;
+    height: 250px;
+    min-width: 250px;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.pokemon-anchor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

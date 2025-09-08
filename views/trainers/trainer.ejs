@@ -8,7 +8,11 @@
 <body>
     <%-include('../misc/nav') %>
     <h1>Trainer: <%= trainer.name %></h1>
-    <form action="/trainers/delete/<%=trainer.id%>" method="POST"><button>Delete Trainer</button></form>
+        <%-include('../partials/errors')%>
+    <form action="/trainers/update/<%=trainer.id%>" method="POST">
+        <input type="hidden" name="trainerid" value="<%=trainer.id%>" id="trainerid">
+        <label for="newName">Update Trainer Name: </label>
+        <input type="text" value="<%=trainer.name%>" name="newName" id="newName"><button>Update</button></form>
         <form action="/newpokemon" method="POST">
         <label for="pokemon">Starter Pokemon: </label>
         <select name="pokemon" id="pokemon">
@@ -33,5 +37,7 @@
             </li>
         <% }); %>
     </ul>
+    <h3>If you wish to remove this trainer and all their pokemon from the database, please click the delete button below...</h3>
+    <form action="/trainers/delete/<%=trainer.id%>" method="POST"><button>Delete</button></form>
 </body>
 </html>

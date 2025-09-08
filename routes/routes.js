@@ -16,5 +16,7 @@ appRouter.post(
 appRouter.post("/trainers/delete/:trainerid", appController.deleteTrainer);
 appRouter.post("/newtrainer", appController.postNewTrainer);
 appRouter.post("/newpokemon", appController.addPokemon);
+appRouter.post("/trainers/update/:trainerid", appController.updateTrainerName);
+appRouter.get("/trainers/update/:trainerid", appController.updateTrainerName);
 
 module.exports = appRouter;

@@ -3,6 +3,18 @@ const pool = require("./pool");
 const pokemonAPI = "https://pokeapi.co/api/v2/pokemon/";
 require("dotenv").config();
 
+const config = {
+  user: process.env.db_user,
+  password: process.env.db_pass,
+  host: process.env.db_host,
+  port: process.env.db_port,
+  database: process.env.db_database,
+  ssl: {
+    rejectUnauthorized: true,
+    ca: process.env.db_ssl,
+  },
+};
+
 const TABLESQL = `
 DROP TABLE IF EXISTS pokemon_owner;
 DROP TABLE IF EXISTS pokemon_type;
@@ -126,22 +138,6 @@ async function insertPokemon(pokemon) {
   );
 }
 
-// async function insertType(pokemon_id, type_id, isPrimary) {
-//   await pool.query(
-//     "INSERT INTO pokemon_type (pokemon_id, type_id, primary_type) VALUES ($1, $2, $3);",
-//     [pokemon_id, type_id, isPrimary]
-//   );
-// }
-
-// async function getTypeId(type_name) {
-//   const query = {
-//     text: `SELECT * FROM type WHERE name = ($1)`,
-//     values: [type_name],
-//   };
-//   const result = await pool.query(query);
-//   return result.rows[0].id;
-// }
-
 async function populatePokemonTable() {
   for (let i = 1; i < 152; i++) {
     fetch(pokemonAPI + i)
@@ -164,9 +160,7 @@ async function populatePokemonTable() {
 
 async function populateOwners() {
   console.log("seeding for owners table...");
-  const client = new Client({
-    connectionString: process.env.DB_URL,
-  });
+  const client = new Client(config);
   await client.connect();
   await client.query(OwnersQuery);
   await client.end();
@@ -175,9 +169,7 @@ async function populateOwners() {
 
 async function main() {
   console.log("seeding...");
-  const client = new Client({
-    connectionString: process.env.DB_URL,
-  });
+  const client = new Client(config);
   await client.connect();
   await client.query(TABLESQL);
   console.log("Tables created");
@@ -192,4 +184,3 @@ async function main() {
 }
 
 main();
-//populateOwners();
